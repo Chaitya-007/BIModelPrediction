@@ -1,0 +1,12 @@
+# Ignore virtual environment
+myenv/
+
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore other files
+*.log
+*.sqlite3
+.vercel

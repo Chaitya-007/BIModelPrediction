@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIKE RENTAL PRICE PREDICTION</title>
+    <style>
+      /* Animation Keyframes */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+        line-height: 1.6;
+      }
+
+      /* Header Styles */
+      h1 {
+        color: #2c3e50;
+        margin: 20px 0;
+        font-size: 2.5em;
+        animation: slideIn 0.8s ease-out;
+      }
+
+      /* Login Container Styles */
+      .login {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 20px auto;
+        max-width: 500px;
+        text-align: left;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .login h1 {
+        font-size: 1.8em;
+        color: #34495e;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .login h3 {
+        font-size: 1.1em;
+        color: #7f8c8d;
+        margin-bottom: 25px;
+        text-align: center;
+      }
+
+      /* Form Styles */
+      .login form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .login input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+      }
+
+      .login input:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 10px rgba(52, 152, 219, 0.1);
+        outline: none;
+      }
+
+      .login input::placeholder {
+        color: #95a5a6;
+      }
+
+      /* Button Styles */
+      .btn,
+      #showImagesButton {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 25px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 10px 0;
+      }
+
+      .btn:hover,
+      #showImagesButton:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      }
+
+      .btn:active,
+      #showImagesButton:active {
+        transform: translateY(1px);
+      }
+
+      /* Image Container Styles */
+      #imageContainer {
+        display: none;
+        gap: 20px;
+        padding: 20px;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      #imageContainer img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      #imageContainer img:hover {
+        transform: scale(1.02);
+      }
+
+      /* Link Styles */
+      a {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        color: #3498db;
+        text-decoration: none;
+        border: 2px solid #3498db;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      a:hover {
+        background: #3498db;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Prediction Text Styles */
+      .prediction-text {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        color: #2c3e50;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .login {
+          margin: 10px;
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2em;
+        }
+
+        .login h1 {
+          font-size: 1.5em;
+        }
+
+        .login h3 {
+          font-size: 1em;
+        }
+
+        .btn,
+        #showImagesButton {
+          padding: 10px 20px;
+          font-size: 1em;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.8em;
+        }
+
+        .login {
+          padding: 15px;
+        }
+
+        .login input {
+          padding: 10px;
+        }
+
+        a {
+          display: block;
+          margin: 10px auto;
+          width: 80%;
+        }
+      }
+
+      /* Grid Layout for Images */
+      @media (min-width: 768px) {
+        #imageContainer {
+          display: none;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        #imageContainer {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const showImagesButton = document.getElementById("showImagesButton");
+        const imageContainer = document.getElementById("imageContainer");
+
+        showImagesButton.addEventListener("click", function () {
+          if (
+            imageContainer.style.display === "none" ||
+            imageContainer.style.display === ""
+          ) {
+            imageContainer.style.display = "grid";
+            imageContainer.style.animation = "fadeIn 0.5s ease-out";
+          } else {
+            imageContainer.style.animation = "fadeOut 0.5s ease-out";
+            setTimeout(() => {
+              imageContainer.style.display = "none";
+            }, 500);
+          }
+        });
+
+        // Add animation to form submission
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function () {
+          this.style.animation = "pulse 0.5s ease";
+        });
+
+        // Add animation to inputs when focused
+        const inputs = document.querySelectorAll("input");
+        inputs.forEach((input) => {
+          input.addEventListener("focus", function () {
+            this.style.transform = "scale(1.02)";
+          });
+          input.addEventListener("blur", function () {
+            this.style.transform = "scale(1)";
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1>BI Mini Project</h1>
+    </div>
+    <div class="login">
+      <h1>PREDICT PRICE OF USED BIKES</h1>
+      <h3>Enter the following values to predict the prices of the bikes</h3>
+      <form action="{{ url_for('predict') }}" method="post">
+        <input
+          type="text"
+          name="kmsdriven"
+          placeholder="KMS DRIVEN"
+          required="required"
+        />
+        <input type="text" name="age" placeholder="AGE" required="required" />
+        <input
+          type="text"
+          name="power"
+          placeholder="POWER"
+          required="required"
+        />
+        <input type="text" name="city" placeholder="CITY" required="required" />
+        <input
+          type="text"
+          name="owner"
+          placeholder="OWNER"
+          required="required"
+        />
+        <input
+          type="text"
+          name="brand"
+          placeholder="BRAND"
+          required="required"
+        />
+        <button type="submit" class="btn">PREDICT</button>
+      </form>
+      <div class="prediction-text">{{ prediction_text }}</div>
+    </div>
+
+    <button id="showImagesButton">Performance Analysis</button>
+    <div id="imageContainer">
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI.png') }}"
+        alt="Image 1"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI2.png') }}"
+        alt="Image 2"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI3.png') }}"
+        alt="Image 3"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI4.png') }}"
+        alt="Image 4"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI5.png') }}"
+        alt="Image 5"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI6.png') }}"
+        alt="Image 6"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI7.png') }}"
+        alt="Image 7"
+      />
+      <img
+        src="{{ url_for('static', filename='images/Screenshot BI8.png') }}"
+        alt="Image 8"
+      />
+    </div>
+
+    <div>
+      <a
+        href="https://app.powerbi.com/groups/me/reports/7f04ea21-47c3-4c65-b374-f0c5082044f5/ReportSection?experience=power-bi"
+        target="_blank"
+        >The Dashboard</a
+      >
+      <!-- 
+      <a href="/photos.html" target="_blank">Performance analysis</a>
+       -->
+    </div>
+  </body>
+</html>

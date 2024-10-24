@@ -1,0 +1,141 @@
+# This Python 3 environment comes with many helpful analytics libraries installed
+# It is defined by the kaggle/python Docker image: https://github.com/kaggle/docker-python
+# For example, here's several helpful packages to load
+
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+
+# Input data files are available in the read-only "../input/" directory
+# For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
+
+import os
+for dirname, _, filenames in os.walk('/kaggle/input'):
+    for filename in filenames:
+        print(os.path.join(dirname, filename))
+
+# You can write up to 20GB to the current directory (/kaggle/working/) that gets preserved as output when you create a version using "Save & Run All" 
+# You can also write temporary files to /kaggle/temp/, but they won't be saved outside of the current session
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+#df = pd.read_csv('D:\Docs\PRASANNA DOCS\College\Fourth Year all docs\BI\Model')
+#df = pd.read_csv('C:\\Users\\anita\\OneDrive\\Desktop\\Used_Bikes.csv')
+df = pd.read_csv(r'D:\Docs\PRASANNA DOCS\College\Fourth Year all docs\BI\Model\Reference.csv')
+
+df1 = pd.read_csv(r'D:\Docs\PRASANNA DOCS\College\Fourth Year all docs\BI\Model\Reference.csv')
+df1.head()
+pip install --upgrade scipy
+df1.shape
+df1.columnsdf2=df1.drop(['CC','Company','City'],axis=1)
+df2.head()
+df2.shape
+df2.isna().sum()
+df2['Price']=df2['Price'].astype('int32')
+df2['Kms Driven']=df2['Kms Driven'].astype('int32')
+df2['Years']=df2['Years'].astype('int32')
+df3=df2.copy()
+df3.head()
+plt.bar(df3['Years'],df3['Price'])
+plt.xlabel('Years')
+plt.ylabel('Price')
+plt.title('Price vs Years')
+plt.show()
+plt.scatter(df3['Kms Driven'],df3['Price'],marker='+',color='g')
+plt.show()
+df4=df3.copy()
+df4.head()
+df4['Years'].unique()
+df4['Years'].describe()
+sns.distplot(df4['Years'])
+sns.boxplot(df4['Years'])
+upper_limit=df4['Years'].mean()+2.3*df4['Years'].std() 
+print('upper_limit:',upper_limit)
+df4.loc[(df4['Years']>upper_limit)]
+df5=df4.loc[(df4['Years']<upper_limit)]
+print('Old_Data:',len(df4))
+print('New_Data:',len(df5))
+print('No.of.outliers:',len(df4)-len(df5))
+df5.head(12)
+sns.boxplot(df5['Years'])
+df5.head(10)
+df5['Kms Driven'].max()
+sns.boxplot(df5['Kms Driven'])
+upper_limit_1=df5['Kms Driven'].mean()+3.4*df5['Kms Driven'].std()
+print('upper_limit_1:',upper_limit_1)
+df5.loc[(df5['Kms Driven']>upper_limit_1)]
+df6=df5.loc[(df5['Kms Driven']<upper_limit_1)]
+print('Old_Data_1:',len(df5))
+print('New_Data_1:',len(df6))
+print('No.of.outliers_1:',len(df5)-len(df6))
+df6['Kms Driven']
+df6.head(10)
+df6.shape
+
+sns.distplot(df6['Price'])
+sns.boxplot(df6['Price'])
+df6['Price'].describe()
+upper_limit_2=df6['Price'].mean()+0.4*df6['Price'].std()
+print('upper_limit_2:',upper_limit_2)
+df6.loc[(df6['Price']>upper_limit_2)]
+df7=df6.loc[(df6['Price']<upper_limit_2)]
+df7.head()
+print('Old_Data_2:',len(df6))
+print('New_Data_2:',len(df7))
+print('No.of.outliers_2:',len(df6)-len(df7))
+df7['Price'].max()
+df7['Price'].min()
+from sklearn.preprocessing import LabelEncoder
+le_owner=LabelEncoder()
+df7['Owner_Type']=le_owner.fit_transform(df7['Ownership details'])
+df7.head(5)
+df7['Ownership details'].unique()
+df8=df7.drop(['Ownership details'],axis=1)
+df8.head()
+df8['Owner_Type'].unique()
+dummies=pd.get_dummies(df8['Bike Name'])
+dummies.head(10)
+dummies1=dummies.drop(['Bajaj Discover 100M'],axis=1)
+dummies1df9=pd.concat([df8,dummies1],axis=1)
+df9.head()
+df10=df9.drop(['Bike Name'],axis=1)
+df10.head()
+X=df10.drop(['Price'],axis=1)
+X.head()
+y=df10['Price']
+y.head()
+from sklearn.ensemble import RandomForestRegressor
+model = RandomForestRegressor(n_estimators=100, random_state=10)
+from sklearn.model_selection import train_test_split
+
+X = df10.drop(['Price'], axis=1)
+y = df10['Price']
+
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=10)
+
+model.fit(x_train, y_train)
+
+r2_score = model.score(x_test, y_test)
+print("R-squared Score:", r2_score)
+  x = np.zeros(len(X.columns))
+ kms_driven = 3000
+age = 4
+x[1] = age
+Owner_Type = 0
+x[2] = Owner_Type
+def predict_price(location, kms_driven, age, Owner_Type):    
+    loc_index = np.where(X.columns == location)[0][0]
+
+    x = np.zeros(len(X.columns)) 
+    x[0] = kms_driven
+    x[1] = age
+    x[2] = Owner_Type
+
+    if loc_index >= 0:
+        x[loc_index] = 1
+
+    return model.predict([x])[0]
+
+predicted_price = predict_price('Hero Glamour 125cc', 25000, 8, 0)
+print("Predicted Price:", predicted_price)
